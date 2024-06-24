@@ -1,0 +1,724 @@
+{
+  "metadata": {
+    "producer": {
+      "version": "0.0.1",
+      "name": "David Oygenblik",
+      "datetime": "2023-05-11T14:30:00.000000"
+    },
+    "format": "6.2.0"
+  },
+  "symbols": {
+  },
+  "enums": {
+  },
+  "user_types": {
+    "PyGC_Head": {
+      "fields": {
+        "gc_next": {
+          "offset": 0,
+          "type": {
+            "kind": "pointer",
+            "subtype": {
+              "kind": "struct",
+              "name": "PyGC_Head"
+            }
+          }
+        },
+        "gc_prev": {
+          "offset": 8,
+          "type": {
+            "kind": "pointer",
+            "subtype": {
+              "kind": "struct",
+              "name": "PyGC_Head"
+            }
+          }
+        },
+        "gc_refs": {
+          "offset": 16,
+          "type": {
+            "kind": "base",
+            "name": "long long"
+          }
+        }
+      },
+      "kind": "struct",
+      "size": 24
+    },
+    "PyObject": {
+      "fields": {
+        "ob_refcnt": {
+          "offset": 0,
+          "type": {
+            "kind": "base",
+            "name": "long long"
+          }
+        },
+        "ob_type": {
+          "offset": 8,
+          "type": {
+            "kind": "pointer",
+            "subtype": {
+              "kind": "struct",
+              "name": "PyTypeObject"
+            }
+          }
+        }
+      },
+      "kind": "struct",
+      "size": 16
+
+    },
+    "PyVarObject": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "ob_size": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 24
+      },
+    "PyInstanceObject": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "dict": {
+            "offset": 16,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyDictObject"
+              }
+            }
+          },
+          "data": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 32
+      },
+    "PyTypeObject": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "ob_size": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "tp_name": {
+            "offset": 24,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "char"
+              }
+            }
+          },
+          "tp_basicsize": {
+            "offset": 32,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "tp_itemsize": {
+            "offset": 40,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "otherfields1": {
+            "offset": 48,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          },
+          "tp_flags": {
+            "offset": 168,
+            "type": {
+              "kind": "base",
+              "name": "unsigned long"
+            }
+          },
+          "tp_doc": {
+            "offset": 176,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "char"
+              }
+            }
+          },
+          "otherfields2": {
+            "offset": 188,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          },
+          "tp_dict": {
+            "offset": 264,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyDictObject"
+              }
+            }
+          },
+          "otherfields3": {
+            "offset": 272,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          },
+          "tp_dictoffset": {
+            "offset": 288,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "otherfields4": {
+            "offset": 296,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 400
+      },
+    "PyDictObject": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "ma_used": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ma_version_tag": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "unsigned long long"
+            }
+          },
+          "ma_keys": {
+            "offset": 32,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyDictKeysObject"
+              }
+            }
+          },
+          "ma_values": {
+            "offset": 40,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 48
+      },
+      "PyDictKeysObject": {
+        "fields": {
+          "dk_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "dk_log2_size": {
+            "offset": 8,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "dk_version": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "unsigned long"
+            }
+          },
+          "dk_usable": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "dk_nentries": {
+            "offset": 32,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "dk_indices": {
+            "offset": 40,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 48
+      },
+    "PyDictKeyEntry": {
+        "fields": {
+          "me_hash": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "unsigned long long"
+            }
+          },
+          "me_key": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyASCIIObject"
+              }
+            }
+          },
+          "me_value": {
+            "offset": 16,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyObject"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 24
+      },
+    "PyASCIIObject": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "length": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "hash": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "state": {
+            "offset": 32,
+            "type": {
+              "kind": "base",
+              "name": "unsigned long"
+            }
+          },
+          "wstr": {
+            "offset": 40,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 48
+      },
+    "PyCompactUnicodeObject": {
+        "fields": {
+          "_base": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyASCIIObject"
+              }
+            }
+          },
+          "utf8_length": {
+            "offset": 48,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "utf8": {
+            "offset": 56,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "char"
+              }
+            }
+          },
+          "wstr_length": {
+            "offset": 64,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 72
+      },
+    "PyUnicodeObject": {
+        "fields": {
+          "_base": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyCompactUnicodeObject"
+              }
+            }
+          },
+          "data": {
+            "offset": 72,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "char"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 80
+      },
+    "PyBoolObject": {
+        "fields": {
+          "VAR_HEAD": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "name": "PyVarObject"
+            }
+          },
+          "ob_digit": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 28
+      },
+    "PyLongObject": {
+        "fields": {
+          "VAR_HEAD": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "name": "PyVarObject"
+            }
+          },
+          "ob_digit": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 32
+      },
+      "PyListObject": {
+        "fields": {
+          "VAR_HEAD": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "name": "PyVarObject"
+            }
+          },
+          "ob_item": {
+            "offset": 24,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          },
+          "allocated": {
+            "offset": 32,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 40
+      },
+    "PyTupleObject": {
+        "fields": {
+          "VAR_HEAD": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "name": "PyVarObject"
+            }
+          },
+          "ob_item": {
+            "offset": 24,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyObject"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 32
+      },
+    "PyBytesObject": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "ob_size": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_shash": {
+            "offset": 24,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_sval": {
+            "offset": 32,
+            "type": {
+              "kind": "base",
+              "name": "char"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 40
+      },
+      "PyFloatObject": {
+        "fields": {
+          "HEAD": {
+            "offset": 0,
+            "type": {
+              "kind": "struct",
+              "name": "PyObject"
+            }
+          },
+          "ob_fval": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 24
+      }
+    },
+  "base_types": {
+    "pointer": {
+      "endian": "little",
+      "kind": "int",
+      "signed": false,
+      "size": 8
+    },
+    "unsigned char": {
+      "endian": "little",
+      "kind": "char",
+      "signed": false,
+      "size": 1
+    },
+    "unsigned short": {
+      "endian": "little",
+      "kind": "int",
+      "signed": false,
+      "size": 2
+    },
+    "long": {
+      "endian": "little",
+      "kind": "int",
+      "signed": true,
+      "size": 4
+    },
+    "char": {
+      "endian": "little",
+      "kind": "char",
+      "signed": true,
+      "size": 1
+    },
+    "unsigned long": {
+      "endian": "little",
+      "kind": "int",
+      "signed": false,
+      "size": 4
+    },
+    "long long": {
+      "endian": "little",
+      "kind": "int",
+      "signed": true,
+      "size": 8
+    },
+    "unsigned long long": {
+      "endian": "little",
+      "kind": "int",
+      "signed": false,
+      "size": 8
+    }
+  }
+}

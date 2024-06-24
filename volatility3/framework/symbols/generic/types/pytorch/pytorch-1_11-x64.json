@@ -1,0 +1,249 @@
+{
+    "metadata": {
+      "producer": {
+        "version": "0.0.1",
+        "name": "David Oygenblik"
+      },
+      "format": "6.2.0"
+    },
+    "symbols": {
+    },
+    "enums": {
+    }, 
+    "user_types": {
+      "Parameter": {
+        "fields": {
+          "ob_refcnt": {
+            "offset": 0,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "ob_type": {
+            "offset": 8,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "PyTypeObject"
+              }
+            }
+          },
+          "otherfield": {
+            "offset": 16,
+            "type": {
+              "kind": "base",
+              "name": "void"
+            }
+          },
+          "data": {
+            "offset": 24,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "Tensor"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 32
+      },
+      "Tensor": {
+        "fields": {
+          "vtable": {
+            "offset": 0,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          },
+          "strong_refcount": {
+            "offset": 8,
+            "type": {
+                "kind": "base",
+                "name": "long long"
+              }
+          },
+          "weak_refcount": {
+            "offset": 16,
+            "type": {
+                "kind": "base",
+                "name": "long long"
+              }
+          },
+          "storage": {
+            "offset": 24,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "Storage"
+              }
+            }
+          },
+          "autograd_metadata": {
+            "offset": 32,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          },
+          "named_tensor_metadata": {
+            "offset": 40,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          },
+          "version_counter": {
+            "offset": 48,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          },
+          "parameter": {
+            "offset": 56,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "Parameter"
+              }
+            }
+          },
+          "py_obj_ptr": {
+            "offset": 64,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "struct",
+                "name": "Parameter"
+              }
+            }
+          },
+          "num_dims": {
+            "offset": 72,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          },
+          "shape": {
+            "offset": 80,
+            "type": {
+              "kind": "base",
+              "name": "long long"
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 88
+      },
+      "Storage": {
+        "fields": {
+          "vtable": {
+            "offset": 0,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          },
+          "strong_refcount": {
+            "offset": 8,
+            "type": {
+                "kind": "base",
+                "name": "long long"
+              }
+          },
+          "weak_refcount": {
+            "offset": 16,
+            "type": {
+                "kind": "base",
+                "name": "long long"
+              }
+          },
+          "data": {
+            "offset": 24,
+            "type": {
+              "kind": "pointer",
+              "subtype": {
+                "kind": "base",
+                "name": "void"
+              }
+            }
+          }
+        },
+        "kind": "struct",
+        "size": 32
+      }
+    },
+    "base_types": {
+      "pointer": {
+        "endian": "little",
+        "kind": "int",
+        "signed": false,
+        "size": 8
+      },
+      "unsigned char": {
+        "endian": "little",
+        "kind": "char",
+        "signed": false,
+        "size": 1
+      },
+      "unsigned short": {
+        "endian": "little",
+        "kind": "int",
+        "signed": false,
+        "size": 2
+      },
+      "long": {
+        "endian": "little",
+        "kind": "int",
+        "signed": true,
+        "size": 4
+      },
+      "char": {
+        "endian": "little",
+        "kind": "char",
+        "signed": true,
+        "size": 1
+      },
+      "unsigned long": {
+        "endian": "little",
+        "kind": "int",
+        "signed": false,
+        "size": 4
+      },
+      "long long": {
+        "endian": "little",
+        "kind": "int",
+        "signed": true,
+        "size": 8
+      },
+      "unsigned long long": {
+        "endian": "little",
+        "kind": "int",
+        "signed": false,
+        "size": 8
+      }
+    }
+  } 
