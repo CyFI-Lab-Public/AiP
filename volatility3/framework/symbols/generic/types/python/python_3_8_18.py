@@ -31,7 +31,6 @@ class Python_3_8_18_IntermedSymbols(intermed.IntermediateSymbolTable):
         self.set_type_class("PyBytesObject", PyBytesObject)          # https://github.com/python/cpython/blob/v3.10.6/Include/cpython/bytesobject.h#L15
         self.set_type_class("PyFloatObject", PyFloatObject)          # https://github.com/python/cpython/blob/main/Include/cpython/floatobject.h#L8
 
-
 class PyGC_Head(objects.StructType):
     pass
 
@@ -50,17 +49,20 @@ class PyObject(objects.StructType):
             'list'          : 'PyListObject',
             'set'           : 'PySetObject',
             'frozenset'     : 'PySetObject',
+            'function'      : 'PyFunctionObject',
+            'code'          : 'PyCodeObject',
             'bytes'         : 'PyBytesObject',
             'Parameter'     : 'PyInstanceObject',
             'dict'          : 'PyDictObject',
             'float'         : 'PyFloatObject',
             'ellipsis'      : 'Ellipsis',
+            'module'        : 'PyModuleObject',
             'type'          : 'PyTypeObject',
             'collections.OrderedDict' : 'PyDictObject',
         }
         return types.get(name, 'PyObject')
     
-    def get_value(self):
+    def get_value(self, cur_depth = None, max_depth=None):
         """
         Retrieves the object's value according to it's type.
         Depth is to protect from recursion depth being exceeded in the case of LARGE dictionaries.
@@ -85,8 +87,13 @@ class PyObject(objects.StructType):
             offset=self.vol.offset,
         )
         if type == 'PyDictObject':
-            obj.get_dict()
-        elif type == 'PyInstanceObject' or type == 'PyObject' or type == 'PyTypeObject':
+            if max_depth is None or (cur_depth >= max_depth):
+                return obj.get_dict(cur_depth, max_depth)
+            else:
+
+                cur_depth+=1
+                return obj.get_dict(cur_depth, max_depth)
+        elif type == 'PyInstanceObject' or type == 'PyObject' or type == 'PyFunctionObject' or type == 'PyTypeObject':
             return obj
         else:
             try:
@@ -165,7 +172,7 @@ class PyDictObject(objects.StructType):
 
         return addresses
     
-    def get_dict(self):
+    def get_dict(self, cur_depth=0, max_depth = None):
         """
         Extracts the dictionary/map from memory.
         Tracks the current depth of recursion as well as the max recursion depth, ensuring that object creation does not loop
@@ -178,7 +185,16 @@ class PyDictObject(objects.StructType):
         else:
             keys = self.ma_keys.dereference().get_keys()
             value_addrs = self.get_values()
-        values = create_objects(self.get_symbol_table_name(), self._context, self.vol.layer_name, value_addrs)
+        if max_depth == None:
+            values = create_objects(self.get_symbol_table_name(), self._context, self.vol.layer_name, value_addrs)
+        else:
+            if cur_depth >= max_depth:
+                # sending default value to value creation to avoid looping in recursion
+                values = create_objects(self.get_symbol_table_name(), self._context, self.vol.layer_name, value_addrs,
+                                        cur_depth, max_depth, 'Depth Reached')
+            else:
+                values = create_objects(self.get_symbol_table_name(), self._context, self.vol.layer_name, value_addrs,
+                                        cur_depth, max_depth, None)
         return self.create_dict(keys, values)
 
 
@@ -419,6 +435,8 @@ class PySetObject(objects.StructType):
         tp = self.HEAD.ob_type.dereference().get_name()
 
         return frozenset(objs) if tp == 'frozenset' else set(objs)
+
+
 class PyBytesObject(objects.StructType):
     def get_value(self):
         """
@@ -451,27 +469,34 @@ class PyFloatObject(objects.StructType):
     
 
 
+class PyClassObject(objects.StructType):
+    pass
 
-def create_objects(symbol_table_name, context, layer_name, addresses):
+
+def create_objects(symbol_table_name, context, layer_name, addresses,cur_depth =None, max_depth=None, default_value = None):
     """
     Given a list of addresses, create a list of Python objects.
     """
     arr = []
-    for addr in addresses:
-        obj = context.object(
-            object_type=symbol_table_name + constants.BANG + 'PyObject',
-            layer_name=layer_name,
-            offset=addr,
-        )
-        try:
-            val = obj.get_value()
-            #if val == '' and arr[0] == 'pickletools':
-                #pdb.set_trace()
-            arr.append(obj.get_value())
-        except UnicodeDecodeError:
-            #if arr[0] == 'pickle_tools':
-                #pdb.set_trace()
-            arr.append("UNICODE_DECODE_ERROR")
+    if default_value is not None:
+        for addr in addresses:
+            arr.append(default_value)
+    else:
+        for addr in addresses:
+            obj = context.object(
+                object_type=symbol_table_name + constants.BANG + 'PyObject',
+                layer_name=layer_name,
+                offset=addr,
+            )
+            try:
+                val = obj.get_value(cur_depth, max_depth)
+                #if val == '' and arr[0] == 'pickletools':
+                    #pdb.set_trace()
+                arr.append(obj.get_value(cur_depth, max_depth))
+            except UnicodeDecodeError:
+                #if arr[0] == 'pickle_tools':
+                    #pdb.set_trace()
+                arr.append("UNICODE_DECODE_ERROR")
     return arr
 
 

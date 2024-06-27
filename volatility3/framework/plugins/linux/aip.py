@@ -3,12 +3,12 @@ from volatility3.framework.configuration import requirements
 from volatility3.framework.objects import utility
 from volatility3.plugins.linux import pslist
 
-from volatility3.framework.symbols.generic.types.python.python_3_7_13 import Python_3_7_13_IntermedSymbols
 from volatility3.framework.symbols.generic.types.python.python_3_8_18 import Python_3_8_18_IntermedSymbols
 from volatility3.framework.symbols.generic.types.pytorch.pytorch_1_11 import PyTorch_1_11_IntermedSymbols
 
 import numpy as np
 import json
+import pdb
 from collections import OrderedDict
 from readelf import ReadElf
 import os
@@ -55,7 +55,7 @@ pyver = None
 USING_GPU = True
 
 
-class AiP(interfaces.plugins.PluginInterface):
+class aip(interfaces.plugins.PluginInterface):
     """
     Finds PyTorch machine learning models and underlying layers, tensors, and attributes present in the memory image.
 
@@ -110,10 +110,6 @@ class AiP(interfaces.plugins.PluginInterface):
             python_table_name = Python_3_8_18_IntermedSymbols.create(
                 self.context, self.config_path, sub_path="generic/types/python", filename="python-3_8_18-x64"
             )
-        elif PyVersionStr == '3_7_13':
-            python_table_name = Python_3_7_13_IntermedSymbols.create(
-                self.context, self.config_path, sub_path="generic/types/python", filename="python-3_7_13-x64"
-            )
         else:
             print("WRONG PYTHON VERSION. RETURNING. \n")
 
@@ -161,8 +157,14 @@ class AiP(interfaces.plugins.PluginInterface):
 
         for counter, model in enumerate(models):
             layers, types, unique_path_types = get_layers_recursive(self.context, curr_layer, python_table_name, model)
+
             info_string, tensor_count, weight_count = process_tensors(self.context, curr_layer, pytorch_table_name,
                                                                     layers, unique_path_types)
+            print(info_string)
+
+            print(f'Total tensor count : {tensor_count}\n')
+            print(f'Total weight count : {weight_count}\n')
+
 
 
     def run(self):
@@ -340,6 +342,8 @@ def check_ptr_candidate(ptr_candidate):
     global GPU_NOT_WEIGHT_PTRS
     GPU_NOT_WEIGHT_PTRS = {}
     section_dict = get_gpu_sec_all()
+    if GPU_MEMDUMP_PATH is None:
+        return False
     with open(GPU_MEMDUMP_PATH, 'rb') as elf_stream, open(elf_output_path, 'w') as output:
         elf_reader = ReadElf(elf_stream, output)
         for sec in section_dict:
@@ -445,6 +449,7 @@ def process_tensors(context, curr_layer, pytorch_table_name, layers, path_types)
 
                 shape = tuple(tensor.shape())
                 model_info[layer_name]['params'][k]['shape'] = shape
+
                 USING_GPU = check_ptr_candidate(tensor_data_ptr)
                 if not USING_GPU:
                     tensor_weights = np.reshape(np.array(tensor.get_data()), shape)
@@ -464,7 +469,6 @@ def process_tensors(context, curr_layer, pytorch_table_name, layers, path_types)
 
     model_info['weight_count'] = weight_counter
     model_info['tensor_count'] = tensor_counter
-    # Build MR
     return  info, tensor_count, weight_count
 
 
@@ -527,7 +531,7 @@ def traverse_GC_3_8(context, curr_layer, PyRuntimeState, PyGC_Head_Offset, pytho
     """
     GC_GENERATIONS = 3
     ct_filt = 0
-    model_identifiers = ['Model', 'Net', 'models.yolo.DetectionModel', 'DetectionModel']
+    model_identifiers = ['resnet18.ResNet', 'ResNet', 'Model', 'Net', 'models.yolo.DetectionModel', 'DetectionModel']
     ct_saved = 0
 
     Models = []
@@ -569,7 +573,6 @@ def traverse_GC_3_8(context, curr_layer, PyRuntimeState, PyGC_Head_Offset, pytho
                 byteorder='little'
             )
             tp_name = hex_bytes_to_text(curr_layer.read(ptr_tp_name, 64, pad=True))
-            print(tp_name)
             # MODEL IDENTIFICATION
             if tp_name in model_identifiers:
                 model = context.object(
@@ -606,7 +609,7 @@ def traverse_GC_3_7(context, curr_layer, PyRuntimeState, PyGC_Head_Offset, pytho
     GC_GENERATIONS = 3
     ct_filt = 0
     ct_saved = 0
-    model_identifiers = ['Model', 'Net', 'models.yolo.DetectionModel', 'DetectionModel']
+    model_identifiers = ['resnet18.ResNet', 'ResNet', 'Model', 'Net', 'models.yolo.DetectionModel', 'DetectionModel']
 
 
     Models = []
@@ -651,7 +654,6 @@ def traverse_GC_3_7(context, curr_layer, PyRuntimeState, PyGC_Head_Offset, pytho
 
             # MODEL IDENTIFICATION
             tp_name = hex_bytes_to_text(curr_layer.read(ptr_tp_name, 64, pad=True))
-            print(tp_name)
             # MODEL IDENTIFICATION
             if tp_name in model_identifiers:
                 model = context.object(
