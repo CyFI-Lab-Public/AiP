@@ -50,10 +50,10 @@ Rehosting script should be imported into a base environment.
 Then, call rehost.get_tensors passing in your original memory dump path and the tensor addresses list (output of recovery tool).
 Then pass model object and output of rehost.get_tensors to rehost.map_tensors(None, model, get_tensors_output).
 
-## Docker Stuff.
-# Link to Docker Image with AIP and sample Memory Image
+## Docker Stuff
+Link to Docker Image with AIP and sample Memory Image
 https://drive.google.com/file/d/1tFkQ-kFhndLPSpsllkFX9AfAFzhvROWD/view?usp=drive_link
 
-# Link to Instructions to Run AIP off the Docker Image
+Link to Instructions to Run AIP off the Docker Image
 https://drive.google.com/file/d/1RpqNlkNCcZWl8Lgwa7vTBhXzSZXmiYGd/view?usp=drive_link
 
