@@ -41,9 +41,11 @@ More documentation/information can be found in the paper: https://www.usenix.org
 
 ## Notes
 All plugins/extensions of AIP for memory images taken from Linux OSs should be placed in ./volatility3/framework/plugins/linux/ 
+
 To directly modify AIP recovery code modify the aip.py plugin located in ./volatility3/framework/plugins/linux/aip.py
 Adding any additional python versions or framework should be done in volatility3/framework/symbols/generic/types/python for python versions and
 volatility3/framework/symbols/generic/types/pytorch for new pytorch versions.
+
 Add new folders to volatility3/framework/symbols/generic/types for other frameworks, and make sure to import to aip.py.
 
 Rehosting script should be imported into a base environment.
